@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../../DB/Models/userModel.js";
-import { eventEmitter, generateOTP } from "../../Utils/Events/event.utils.js";
+import { generateOTP } from "../../Utils/Events/event.utils.js";
 import { sendEmail } from "../../Utils/Email/email.utils.js";
 import { template } from "../../Utils/Email/template.js";
 
@@ -26,11 +26,15 @@ export const createUser = async (data) => {
     confirmedEmail: false,
   });
 
-  await eventEmitter.emit("confirmEmail", {
-    to: data.email,
-    otp,
-    firstName: data.firstName,
-  });
+  try {
+    await sendEmail({
+      to: data.email,
+      subject: "Confirm Email",
+      html: template(otp, data.firstName),
+    });
+  } catch (err) {
+    console.error("Email Error:", err.message);
+  }
 
   return user;
 };
