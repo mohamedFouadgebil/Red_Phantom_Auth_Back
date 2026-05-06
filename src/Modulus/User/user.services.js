@@ -26,7 +26,7 @@ export const createUser = async (data) => {
     confirmedEmail: false,
   });
 
-  eventEmitter.emit("confirmEmail", {
+  await eventEmitter.emit("confirmEmail", {
     to: data.email,
     otp,
     firstName: data.firstName,
