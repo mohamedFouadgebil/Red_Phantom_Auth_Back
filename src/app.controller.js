@@ -9,16 +9,7 @@ export const initApp = (app) => {
   app.use(cors());
   app.use(express.json());
 
-  connectDB();
-
-  app.use("/api/users", userRouter);
   
-  app.get("/", (req, res) => {
-    res.json({
-        message: "Red Phantom API is running 🚀"
-    });
-    });
-
   app.use(
   helmet.contentSecurityPolicy({
     directives: {
@@ -34,6 +25,17 @@ export const initApp = (app) => {
     }
   })
 );
+
+
+  connectDB();
+
+  app.use("/api/users", userRouter);
+  
+  app.get("/", (req, res) => {
+    res.json({
+        message: "Red Phantom API is running 🚀"
+    });
+    });
 
 
   app.use("/*dummy", (req, res) =>
