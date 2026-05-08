@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
 import { connectDB } from "./DB/connections.js";
 import userRouter from "./Modulus/User/user.controller.js";
 import { globalError } from "./Middleware/error.middleware.js";
@@ -17,6 +18,22 @@ export const initApp = (app) => {
         message: "Red Phantom API is running 🚀"
     });
     });
+
+  app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'"],
+      imgSrc: ["'self'", "data:"],
+      fontSrc: ["'self'", "data:"],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+      frameAncestors: ["'none'"],
+      formAction: ["'self'"]
+    }
+  })
+);
 
 
   app.use("/*dummy", (req, res) =>
